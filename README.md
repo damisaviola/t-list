@@ -33,5 +33,13 @@ cd frontend
 npm install
 npm run dev
 
+```
 
+### Menjalankan Frontend
 
+```bash
+cd backend
+go mod tidy
+go run .
+
+```
