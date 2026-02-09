@@ -7,22 +7,17 @@ export default function Navbar() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulasi loading sebentar untuk efek skeleton yang cantik
     const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
   }, []);
 
   return (
-    /* STRATEGI CENTERING: 
-       Gunakan container full-width dengan flex justify-center. 
-       Ini mencegah konflik antara Tailwind 'translate' dan Framer Motion 'transform'.
-    */
     <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
       <motion.nav
         variants={fadeUp}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-3xl pointer-events-auto"
+        className="w-full max-w-4xl pointer-events-auto"
       >
         <AnimatePresence mode="wait">
           {loading ? (
@@ -31,7 +26,6 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
             >
               <NavbarSkeleton />
             </motion.div>
@@ -51,74 +45,147 @@ export default function Navbar() {
   );
 }
 
-/* ================= REAL NAVBAR CONTENT ================= */
+/* ================= CONTENT ================= */
 
 function NavbarContent() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="liquid-glass rounded-full px-5 sm:px-8 py-3 flex items-center gap-6 shadow-2xl border border-white/10 backdrop-blur-xl bg-black/20">
-      
-      {/* BRAND / LOGO */}
+    <div className="relative liquid-glass rounded-full px-5 sm:px-8 py-3 flex items-center gap-4 border border-white/10 backdrop-blur-xl bg-black/20 shadow-2xl">
+
+      {/* BRAND */}
       <Link to="/" className="hover:opacity-80 transition-opacity">
         <span className="font-bold text-sm sm:text-base text-white flex items-center gap-2 whitespace-nowrap">
           <span className="text-yellow-400">⚡</span> GenZ Todo
         </span>
       </Link>
 
-      {/* NAV LINKS */}
+      {/* DESKTOP MENU */}
       <div className="hidden md:flex gap-6 text-xs sm:text-sm font-medium text-slate-300">
-        <a href="#home" className="hover:text-white transition-colors relative group">
-          Home
-          <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all group-hover:w-full" />
-        </a>
-        <a href="#todo" className="hover:text-white transition-colors relative group">
-          App
-          <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all group-hover:w-full" />
-        </a>
-        <a href="#todo" className="hover:text-white transition-colors relative group">
-          About
-          <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all group-hover:w-full" />
-        </a>
+        <NavItem label="Home" href="#home" />
+        <NavItem label="Dashboard" href="#dashboard" />
+        <NavItem label="Tasks" href="#todo" />
+        <NavItem label="Stats" href="#stats" />
+        <NavItem label="Settings" href="#settings" />
       </div>
 
-      {/* LOGIN BUTTON (The Polished Version) */}
-      <div className="ml-auto">
+      {/* MOBILE BUTTON */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="ml-auto md:hidden text-white text-xl"
+        aria-label="Toggle menu"
+      >
+        {open ? "✕" : "☰"}
+      </button>
+
+      {/* DESKTOP LOGIN */}
+      <div className="hidden md:block ml-auto">
         <Link
           to="/login"
-          className="group relative px-6 py-2 rounded-full text-xs sm:text-sm font-bold
-                     bg-accent text-black overflow-hidden inline-block
-                     transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]
-                     hover:-translate-y-0.5 hover:scale-105 active:scale-95
-                     shadow-[0_0_15px_rgba(0,242,255,0.3)]
-                     hover:shadow-[0_0_25px_rgba(0,242,255,0.6)]
-                     will-change-transform"
+          className="
+            px-6 py-2 rounded-full text-xs sm:text-sm font-bold
+            bg-accent text-black
+            transition-all hover:-translate-y-0.5 hover:scale-105
+            shadow-[0_0_15px_rgba(0,242,255,0.4)]
+          "
         >
-          {/* GLOW OVERLAY */}
-          <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* SHIMMER ANIMATION */}
-          <span
-            className="absolute inset-0 -translate-x-full group-hover:translate-x-full
-                       bg-gradient-to-r from-transparent via-white/70 to-transparent
-                       transition-transform duration-1000 ease-in-out skew-x-[-20deg]"
-          />
-
-          <span className="relative z-10">Login</span>
+          Login
         </Link>
       </div>
+
+      {/* MOBILE DROPDOWN */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="
+              absolute top-full left-0 right-0 mt-3
+              liquid-glass rounded-2xl p-4
+              md:hidden
+              shadow-2xl
+            "
+          >
+            <div className="flex flex-col gap-2 text-sm text-slate-300">
+
+              <MobileItem label="Home" href="#home" onClick={() => setOpen(false)} />
+              <MobileItem label="Dashboard" href="#dashboard" onClick={() => setOpen(false)} />
+              <MobileItem label="Tasks" href="#todo" onClick={() => setOpen(false)} />
+              <MobileItem label="Stats" href="#stats" onClick={() => setOpen(false)} />
+              <MobileItem label="Settings" href="#settings" onClick={() => setOpen(false)} />
+
+              <div className="h-px bg-white/10 my-2" />
+
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="
+                  mt-1 px-4 py-2 rounded-xl
+                  bg-accent text-black
+                  font-bold text-center
+                "
+              >
+                Login
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-/* ================= SKELETON STATE ================= */
+/* ================= REUSABLE ================= */
+
+function NavItem({ label, href }: { label: string; href: string }) {
+  return (
+    <a
+      href={href}
+      className="hover:text-white transition relative group"
+    >
+      {label}
+      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all group-hover:w-full" />
+    </a>
+  );
+}
+
+function MobileItem({
+  label,
+  href,
+  onClick,
+}: {
+  label: string;
+  href: string;
+  onClick: () => void;
+}) {
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      className="
+        px-3 py-2 rounded-xl
+        hover:bg-white/5 hover:text-white
+        transition
+      "
+    >
+      {label}
+    </a>
+  );
+}
+
+/* ================= SKELETON ================= */
 
 function NavbarSkeleton() {
   return (
     <div className="liquid-glass rounded-full px-5 sm:px-8 py-3 flex items-center gap-6 border border-white/5 bg-white/5 backdrop-blur-md">
       <div className="h-5 w-28 bg-white/10 animate-pulse rounded-full" />
       <div className="hidden md:flex gap-6">
-        <div className="h-3 w-12 bg-white/10 animate-pulse rounded-full" />
-        <div className="h-3 w-12 bg-white/10 animate-pulse rounded-full" />
-        <div className="h-3 w-12 bg-white/10 animate-pulse rounded-full" />
+        <div className="h-3 w-14 bg-white/10 animate-pulse rounded-full" />
+        <div className="h-3 w-14 bg-white/10 animate-pulse rounded-full" />
+        <div className="h-3 w-14 bg-white/10 animate-pulse rounded-full" />
+        <div className="h-3 w-14 bg-white/10 animate-pulse rounded-full" />
       </div>
       <div className="ml-auto h-9 w-20 bg-white/10 animate-pulse rounded-full" />
     </div>

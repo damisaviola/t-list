@@ -1,14 +1,20 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import TodoSection from "../components/TodoSection";
 
 export default function TodoApp() {
   return (
-    <div className="relative min-h-screen pt-24">
-      <div className="neon-bg" />
-      <div className="grid-bg" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* BACKGROUND */}
+      <div className="neon-bg absolute inset-0 -z-10" />
+      <div className="grid-bg absolute inset-0 -z-10" />
 
+      {/* NAVBAR (FIXED) */}
       <Navbar />
-      <TodoSection />
+
+      {/* CONTENT */}
+      <main className="pt-28">
+        <TodoSection />
+      </main>
     </div>
   );
 }
