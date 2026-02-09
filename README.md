@@ -1,5 +1,3 @@
-# Todo Management Application
-
 ## Tech Stack
 
 ### Frontend
