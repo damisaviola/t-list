@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import TodoApp from "./pages/TodoApp";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   return (
@@ -14,7 +15,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
+        <Route path="/profile" element={<ProfilePage />} />
         {/* PROTECTED */}
         <Route
           path="/app"
