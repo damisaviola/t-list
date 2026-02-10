@@ -6,6 +6,8 @@ import TodoApp from "./pages/TodoApp";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilePage";
+import "./lib/chart";
+
 
 export default function App() {
   return (
