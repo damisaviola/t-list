@@ -11,7 +11,7 @@ export default function ProfilePage() {
 
   const user: User = {
     name: "Dami",
-    email: "dami@genztodo.app",
+    email: "test@development.app",
     role: "Member",
     joinedAt: "January 2025",
   };
